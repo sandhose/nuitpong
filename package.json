@@ -1,0 +1,29 @@
+{
+  "name": "bee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "watchify client.js -o 'exorcist public/bundle.js.map > public/bundle.js' -d",
+    "build": "browserify client.js --debug | exorcist public/bundle.js.map > public/bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "devDependencies": {
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "exorcist": "^0.4.0",
+    "qrcode": "^0.4.1",
+    "uuid": "^2.0.1",
+    "watchify": "^3.6.1"
+  },
+  "dependencies": {
+    "simple-peer": "^5.11.6"
+  }
+}
