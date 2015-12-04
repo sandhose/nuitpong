@@ -1,34 +1,77 @@
 "use strict";
 
 import MasterPeer from "./lib/master-peer";
-import ControllerPeer from "./lib/controller-peer";
 import ConnPeer from "./lib/peer";
+import { log } from "./lib/log";
+import Game from "./lib/game";
 
 class App {
   constructor() {
     let match = window.location.hash.match(/#(\d{4})/);
     if(match) {
         let offer = match[1];
-        let peer = new ConnPeer();
-        peer.fetchOffer(offer)
-          .then(o => {
-            peer.init();
-            return peer.signal(o);
-          })
-          .then(o => peer.sendOffer(o))
-          .then(this.showOffer)
-          .then(() => peer.waitConnect())
-          .then(() => console.log("\o/"));
+        this.peer = new ConnPeer();
+        this.connectControl(offer)
+          .then(() => this.showControls())
+          .then(() => this.initCtrl());
     } else {
-      let mp = new MasterPeer();
-      mp.addPeer();
+      this.mp = new MasterPeer();
+      this.mp.cb = k => this.sendKey(k);
+      this.connectMaster()
+        .then(() => this.initGame());
     }
   }
 
+  sendKey(k) {
+    this.game.playerInput("one", k);
+  }
+
+  initGame() {
+    document.getElementById("offer").style.display = "none";
+    document.getElementById("canvas").style.display = "block";
+    this.game = new Game(document.getElementById("canvas"));
+    requestAnimationFrame(() => this.game.loop());
+  }
+
+  initCtrl() {
+    this.up = document.getElementById("up");
+    this.down = document.getElementById("down");
+
+    this.up.addEventListener("touchstart", () => this.sendCtrl(1));
+    this.down.addEventListener("touchstart", () => this.sendCtrl(-1));
+    this.up.addEventListener("touchend", () => this.sendCtrl(0));
+    this.down.addEventListener("touchend", () => this.sendCtrl(0));
+  }
+
+  sendCtrl(key) {
+    this.peer.peer.send(key);
+  }
+
+  connectMaster() {
+    return this.mp.addPeer();
+  }
+
+  connectControl(offer) {
+    return this.peer.fetchOffer(offer)
+      .then(o => {
+        this.peer.init();
+        return this.peer.signal(o);
+      })
+      .then(o => this.peer.sendOffer(o))
+      .then(this.showOffer)
+      .then(() => this.peer.waitConnect());
+  }
+
   showOffer(offerId) {
-    let offerElem = document.createElement("p");
+    let offerElem = document.createElement("h1");
     offerElem.innerHTML = offerId;
-    document.body.appendChild(offerElem);
+    document.getElementById("offer").appendChild(offerElem);
+    document.getElementById("offer-title").innerHTML = "Entrez ce code dans le navigateur";
+  }
+
+  showControls() {
+    document.getElementById("offer").style.display = "none";
+    document.getElementById("controls").style.display = "block";
   }
 }
 

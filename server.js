@@ -2,23 +2,14 @@
 
 import connect from "connect";
 import http from "http";
-import createStatic from "connect-static";
+import serveStatic from "serve-static";
 import body from "body-parser";
 
 let app = connect();
 let offers = new Map();
 
 app.use(body.json());
-
-createStatic({
-  dir: "public",
-  aliases: [
-    ["/", "/index.html"]
-  ]
-}, (err, middleware) => {
-  if(err) throw err;
-  app.use(middleware);
-});
+app.use(serveStatic("public/"));
 
 app.use((req, res, next) => {
   let match = req.url.match(/^\/o\/(\d{4})$/)
