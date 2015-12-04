@@ -37,10 +37,36 @@ class App {
     this.up = document.getElementById("up");
     this.down = document.getElementById("down");
 
-    this.up.addEventListener("touchstart", () => this.sendCtrl(1));
-    this.down.addEventListener("touchstart", () => this.sendCtrl(-1));
-    this.up.addEventListener("touchend", () => this.sendCtrl(0));
-    this.down.addEventListener("touchend", () => this.sendCtrl(0));
+    this.up.addEventListener("touchstart", e => {
+      this.absorbEvent(e);
+      this.sendCtrl(1);
+    });
+
+    this.down.addEventListener("touchstart", e => {
+      this.absorbEvent(e);
+      this.sendCtrl(-1);
+    });
+
+    document.body.addEventListener("touchend", e => {
+      this.absorbEvent(e);
+      this.sendCtrl(0);
+    });
+
+    document.body.addEventListener("touchcancel", e => this.absorbEvent(e));
+    document.body.addEventListener("touchmove", e => this.absorbEvent(e));
+
+    this.up.addEventListener("mousedown", () => this.sendCtrl(1));
+    this.down.addEventListener("mousedown", () => this.sendCtrl(-1));
+    document.body.addEventListener("mouseup", () => this.sendCtrl(0));
+  }
+
+  absorbEvent(e) {
+    var e = event || window.event;
+    e.preventDefault && e.preventDefault();
+    e.stopPropagation && e.stopPropagation();
+    e.cancelBubble = true;
+    e.returnValue = false;
+    return false;
   }
 
   sendCtrl(key) {

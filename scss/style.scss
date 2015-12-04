@@ -35,23 +35,23 @@ body {
   height: 100%;
   background-color: #468966;
   color: white;
-  h1 {
+
+  #up, #down {
+    height: 50vh;
+    line-height: 50vh;
     font-size: 2em;
-    font-weight: bold;
-    margin-top: 50px;
     text-align: center;
+    transition: background-color .1s ease-in-out;
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    &:active {
+      background-color: lighten(#468966, 10%);
+    }
   }
 
-  .ctrl {
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-
-    & > * {
-      flex: 1;
-      font-size: 2em;
-      text-align: center;
-    }
+  #up {
+    border-bottom: lighten(#468966, 10%) solid 1px;
   }
 }
 
