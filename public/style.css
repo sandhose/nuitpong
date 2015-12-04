@@ -363,18 +363,22 @@ body {
   justify-content: center;
   align-items: center; }
 
-#offer {
-  flex: 0 0 300px;
-  max-width: 300px; }
-  #offer img {
-    width: 100%; }
-  #offer form {
-    width: 100%;
-    display: flex; }
-    #offer form button {
-      flex: 0 0 80px; }
-    #offer form input {
-      flex: 1; }
+#offers {
+  display: flex;
+  width: 100%;
+  justify-content: space-around; }
+  #offers .offer {
+    flex: 0 0 300px;
+    max-width: 300px; }
+    #offers .offer img {
+      width: 100%; }
+    #offers .offer form {
+      width: 100%;
+      display: flex; }
+      #offers .offer form button {
+        flex: 0 0 80px; }
+      #offers .offer form input {
+        flex: 1; }
 
 #controls {
   width: 100%;

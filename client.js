@@ -16,18 +16,18 @@ class App {
           .then(() => this.initCtrl());
     } else {
       this.mp = new MasterPeer();
-      this.mp.cb = k => this.sendKey(k);
+      this.mp.cb = (p, k) => this.sendKey(p, k);
       this.connectMaster()
         .then(() => this.initGame());
     }
   }
 
-  sendKey(k) {
-    this.game.playerInput("one", k);
+  sendKey(player, key) {
+    this.game.playerInput(player, key);
   }
 
   initGame() {
-    document.getElementById("offer").style.display = "none";
+    document.getElementById("offers").style.display = "none";
     document.getElementById("canvas").style.display = "block";
     this.game = new Game(document.getElementById("canvas"));
     requestAnimationFrame(() => this.game.loop());
@@ -74,7 +74,10 @@ class App {
   }
 
   connectMaster() {
-    return this.mp.addPeer();
+    return Promise.all([
+      this.mp.addPeer("one"),
+      this.mp.addPeer("two")
+    ]);
   }
 
   connectControl(offer) {
@@ -90,13 +93,12 @@ class App {
 
   showOffer(offerId) {
     let offerElem = document.createElement("h1");
-    offerElem.innerHTML = offerId;
-    document.getElementById("offer").appendChild(offerElem);
-    document.getElementById("offer-title").innerHTML = "Entrez ce code dans le navigateur";
+    offerElem.innerHTML = "Code de connexion: " + offerId;
+    document.getElementById("offers").appendChild(offerElem);
   }
 
   showControls() {
-    document.getElementById("offer").style.display = "none";
+    document.getElementById("offers").style.display = "none";
     document.getElementById("controls").style.display = "block";
   }
 }

@@ -8,24 +8,30 @@ body {
   align-items: center;
 }
 
-#offer {
-  flex: 0 0 300px;
-  max-width: 300px;
+#offers {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
 
-  img {
-    width: 100%;
-  }
+  .offer {
+    flex: 0 0 300px;
+    max-width: 300px;
 
-  form {
-    width: 100%;
-    display: flex;
-
-    button {
-      flex: 0 0 80px;
+    img {
+      width: 100%;
     }
 
-    input {
-      flex: 1;
+    form {
+      width: 100%;
+      display: flex;
+
+      button {
+        flex: 0 0 80px;
+      }
+
+      input {
+        flex: 1;
+      }
     }
   }
 }
